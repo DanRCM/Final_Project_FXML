@@ -30,4 +30,9 @@ public class Jugador {
     public void removerFicha(Ficha ficha) {
         mano.remove(ficha);
     }
+    public void printMano(){
+        for(Ficha f: mano){
+            System.out.println(f);
+        }
+    }
 }

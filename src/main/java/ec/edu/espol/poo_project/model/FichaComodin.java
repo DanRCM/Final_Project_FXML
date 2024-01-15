@@ -4,12 +4,15 @@
  */
 package ec.edu.espol.poo_project.model;
 
+import javafx.scene.image.ImageView;
+
 /**
  *
  * @author CARLOS THOME
  */
 public class FichaComodin extends Ficha {
-    public FichaComodin() {
-        super(-1, -1, "/util/Fichas/comodin.gif");
+
+    public FichaComodin(ImageView img) {
+        super(-1, -1, img);
     }
 }

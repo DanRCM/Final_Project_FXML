@@ -4,7 +4,7 @@
  */
 package ec.edu.espol.poo_project.controller;
 
-import ec.edu.espol.poo_project.util.UtilitariaView;
+import ec.edu.espol.poo_project.util.Utilitaria;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,25 +36,23 @@ public class OptionsViewController implements Initializable {
 
     @FXML
     public void switchToMenu() throws IOException {
-        App.setRoot("Menu", UtilitariaView.widthWindow, UtilitariaView.heightWindow);
+        App.setRoot("Menu", Utilitaria.widthWindow, Utilitaria.heightWindow);
     }
 
     private void volumeSetup() {
         MediaPlayer music = App.getMusicPlayer();
-
         music.volumeProperty().unbind(); //eliminar bind anterior
         slider.valueProperty().set(music.volumeProperty().get()); //poner slider acorde a volumen
-
         App.getMusicPlayer().volumeProperty().bind(slider.valueProperty());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         volumeSetup();
-        UtilitariaView.crearOpcionesBox();
-        BackgroundImage backgroundImage = new BackgroundImage(UtilitariaView.cargarImagen("/util/BackGrounds/BackgroundOptions.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(UtilitariaView.widthWindow, UtilitariaView.heightWindow, false, false, false, false));
+        Utilitaria.crearOpcionesBox();
+        BackgroundImage backgroundImage = new BackgroundImage(Utilitaria.cargarImagen("/util/BackGrounds/BackgroundOptions.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(Utilitaria.widthWindow, Utilitaria.heightWindow, false, false, false, false));
         // Establecer el BackgroundImage en el AnchorPane
         apOptions.setBackground(new Background(backgroundImage));
-        vbOp.getChildren().add(UtilitariaView.crearOpcionesBox());
+        vbOp.getChildren().add(Utilitaria.crearOpcionesBox());
     }
 }

@@ -1,6 +1,6 @@
 package ec.edu.espol.poo_project.controller;
 
-import ec.edu.espol.poo_project.util.UtilitariaView;
+import ec.edu.espol.poo_project.util.Utilitaria;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,12 +29,12 @@ public class MenuController implements Initializable {
 
     @FXML
     private void switchToNewGame() throws IOException {
-        App.setRoot("NewGameView", UtilitariaView.widthWindow, UtilitariaView.heightWindow);
+        App.setRoot("NewGameView", Utilitaria.widthWindow, Utilitaria.heightWindow);
     }
 
     @FXML
     private void switchToOptions() throws IOException {
-        App.setRoot("OptionsView", UtilitariaView.widthWindow, UtilitariaView.heightWindow);
+        App.setRoot("OptionsView", Utilitaria.widthWindow, Utilitaria.heightWindow);
     }
 
     @FXML
@@ -52,7 +52,7 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        BackgroundImage backgroundImage = new BackgroundImage(UtilitariaView.cargarImagen("/util/BackGrounds/BackgroundNewGame 1.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(UtilitariaView.widthWindow, UtilitariaView.heightWindow, false, false, false, false));
+        BackgroundImage backgroundImage = new BackgroundImage(Utilitaria.cargarImagen("/util/BackGrounds/BackgroundNewGame 1.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(Utilitaria.widthWindow, Utilitaria.heightWindow, false, false, false, false));
         // Establecer el BackgroundImage en el AnchorPane
         apMenu.setBackground(new Background(backgroundImage));
         AnchorPane.setTopAnchor(vBox, (apMenu.getHeight() - vBox.getHeight()) / 2);

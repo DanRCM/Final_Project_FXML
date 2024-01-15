@@ -4,7 +4,8 @@
  */
 package ec.edu.espol.poo_project.model;
 
-import java.util.Objects;
+import ec.edu.espol.poo_project.util.Utilitaria;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -13,13 +14,14 @@ import java.util.Objects;
 public class Ficha {
     private int ladoI;
     private int ladoD;
-    private String img;
+    private ImageView img;
 
-    public Ficha(int ladoI, int ladoD, String img) {
+    public Ficha(int ladoI, int ladoD, ImageView img) {
         this.ladoI = ladoI;
         this.ladoD = ladoD;
         this.img = img;
     }
+    
     public int getLadoI() {
         return ladoI;
     }
@@ -28,7 +30,7 @@ public class Ficha {
         return ladoD;
     }
 
-    public String getImg() {
+    public ImageView getImg() {
         return img;
     }
 
@@ -40,14 +42,8 @@ public class Ficha {
         this.ladoD = ladoD;
     }
 
-    public void setImg(String img) {
+    public void setImg(ImageView img) {
         this.img = img;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
     }
 
     @Override
@@ -62,7 +58,17 @@ public class Ficha {
             return false;
         }
         final Ficha other = (Ficha) obj;
-        return Objects.equals(this.img, other.img);
+        if (this.ladoI != other.ladoI) {
+            return false;
+        }
+        return this.ladoD == other.ladoD;
     }
+
+    @Override
+    public String toString() {
+        return "Ficha{" + "ladoI=" + ladoI + ", ladoD=" + ladoD + ", img=" + img.getImage().getUrl() + '}';
+    }
+
+
     
 }

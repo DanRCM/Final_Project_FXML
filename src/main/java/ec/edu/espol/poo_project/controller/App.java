@@ -1,12 +1,11 @@
 package ec.edu.espol.poo_project.controller;
 
-import ec.edu.espol.poo_project.util.UtilitariaView;
+import ec.edu.espol.poo_project.util.Utilitaria;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -17,7 +16,6 @@ import javafx.scene.media.MediaPlayer;
 public class App extends Application {
 
     private static Scene scene;
-
     private static MediaPlayer musicPlayer;
 
     public static Scene getScene() {
@@ -30,7 +28,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("Menu"), UtilitariaView.widthWindow, UtilitariaView.heightWindow);
+        scene = new Scene(loadFXML("Menu"), Utilitaria.widthWindow, Utilitaria.heightWindow);
         stage.setTitle("Domino Politecnico");
         stage.setScene(scene);
         stage.show();
@@ -48,7 +46,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        Media musicFile = UtilitariaView.cargarMusica("/util/Musica/jazz.mp3");
+        Utilitaria.cargarFichas();
+        Media musicFile = Utilitaria.cargarMusica("/util/Musica/jazz.mp3");
         MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();

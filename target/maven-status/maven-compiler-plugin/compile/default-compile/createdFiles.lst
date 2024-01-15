@@ -6,7 +6,6 @@ ec/edu/espol/poo_project/model/Jugador.class
 ec/edu/espol/poo_project/model/Ficha.class
 ec/edu/espol/poo_project/controller/Principal.class
 ec/edu/espol/poo_project/controller/NewGameViewController.class
-ec/edu/espol/poo_project/util/UtilitariaView.class
 ec/edu/espol/poo_project/controller/App.class
 ec/edu/espol/poo_project/model/Juego.class
 ec/edu/espol/poo_project/model/FichaComodin.class

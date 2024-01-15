@@ -2,7 +2,7 @@ package ec.edu.espol.poo_project.controller;
 
 import ec.edu.espol.poo_project.model.Ficha;
 import ec.edu.espol.poo_project.model.Juego;
-import ec.edu.espol.poo_project.util.UtilitariaView;
+import ec.edu.espol.poo_project.util.Utilitaria;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,11 +38,11 @@ public class NewGameViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        gp.setPrefWidth(UtilitariaView.widthWindow);
-        gp.setPrefHeight(UtilitariaView.heightWindow);
-        BackgroundImage backgroundImage = new BackgroundImage(UtilitariaView.cargarImagen("/util/BackGrounds/BackgroundNewGame 1.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(UtilitariaView.widthWindow, UtilitariaView.heightWindow, false, false, false, false));
+        gp.setPrefWidth(Utilitaria.widthWindow);
+        gp.setPrefHeight(Utilitaria.heightWindow);
+        BackgroundImage backgroundImage = new BackgroundImage(Utilitaria.cargarImagen("/util/BackGrounds/BackgroundNewGame 1.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(Utilitaria.widthWindow, Utilitaria.heightWindow, false, false, false, false));
         apNewGameView.setBackground(new Background(backgroundImage));
-        juego = new Juego(UtilitariaView.obtenerNombreDialogo());
+        juego = new Juego(Utilitaria.obtenerNombreDialogo());
         juego.actualizar(mano0, mano1, tablero);
         if (juego.getTurno() == 1) {
             juego.jugarFichaComputer();
@@ -72,6 +72,6 @@ public class NewGameViewController implements Initializable {
 
     @FXML
     private void switchToMenu(ActionEvent event) throws IOException {
-        App.setRoot("Menu", UtilitariaView.widthWindow, UtilitariaView.heightWindow);
+        App.setRoot("Menu", Utilitaria.widthWindow, Utilitaria.heightWindow);
     }
 }

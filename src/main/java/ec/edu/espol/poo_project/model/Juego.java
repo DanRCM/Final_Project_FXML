@@ -5,15 +5,12 @@
 package ec.edu.espol.poo_project.model;
 
 import ec.edu.espol.poo_project.util.Utilitaria;
-import ec.edu.espol.poo_project.util.UtilitariaView;
 import ec.edu.espol.poo_project.controller.App;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -26,25 +23,31 @@ public class Juego {
 
     private int turno;
     private ArrayList<Ficha> tablero;
+    private static ArrayList<Ficha> fichasJuego;
     private ArrayList<Jugador> jugadores;
 
     public Juego(String nom) {
         tablero = new ArrayList<>();
-        turno = (Math.random() < 0.5) ? 0 : 1;
+        fichasJuego = new ArrayList<>();
+        System.out.println("Aqui1");
+        fichasJuego.addAll(Utilitaria.fichasExistentes);
+        System.out.println("Aqui2");
+        turno = (Math.random() < 0.5) ? 0 : 1; // elegir aleatoriamente el turno
         jugadores = new ArrayList<>();
         jugadores.add(new Jugador(Utilitaria.generarMano(), nom));
         jugadores.add(new Jugador(Utilitaria.generarMano(), "Computador"));
+        System.out.println(jugadores.get(0).getMano());
     }
 
     public int getTurno() {
         return turno;
     }
 
-    public int getExtremeI() {
+    public int getLadoExtremeIz() {
         return tablero.get(0).getLadoI();
     }
 
-    public int getExtremeD() {
+    public int getLadoExtremeDer() {
         return tablero.get(tablero.size() - 1).getLadoD();
     }
 
@@ -52,48 +55,53 @@ public class Juego {
         this.turno = Math.abs(this.turno - 1);
     }
 
+    public static Ficha buscarFicha(int ladoI, int ladoD) {
+        for (Ficha f : Juego.fichasJuego) {
+            if (ladoD == f.getLadoD()) {
+                if (ladoI == f.getLadoI()) {
+                    Juego.fichasJuego.remove(f);
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+
     public void actualizar(HBox mano0, HBox mano1, FlowPane tablero) {
-        ImageView i;
         mano0.getChildren().clear();
         mano1.getChildren().clear();
         tablero.getChildren().clear();
         for (Ficha f : this.tablero) {
-            i = new ImageView(new Image(f.getImg()));
-            UtilitariaView.redimensionarFicha(i);
-            tablero.getChildren().add(i);
+            tablero.getChildren().add(f.getImg());
         }
+
         for (Ficha f : this.jugadores.get(0).getMano()) {
-            i = new ImageView(new Image(f.getImg()));
-            UtilitariaView.redimensionarFicha(i);
-            mano0.getChildren().add(i);
+            mano0.getChildren().add(f.getImg());
         }
+
         for (Ficha f : this.jugadores.get(1).getMano()) {
-            i = new ImageView(new Image(f.getImg()));
-            UtilitariaView.redimensionarFicha(i);
-            mano1.getChildren().add(i);
+            mano1.getChildren().add(f.getImg());
         }
     }
 
     public static Ficha obtenerFichaClick(Node clickedNode) {
-        ImageView clickedImageView = (ImageView) clickedNode;
-        String imagePath = clickedImageView.getImage().getUrl();
-        File imageFile = new File(imagePath);
-        String imageName = imageFile.getName();
-        String imageNameWithoutExtension = imageName.replace(".png", "");
-        if (imageNameWithoutExtension.equals("comodin.gif")) {
-            return new FichaComodin();
+        if (clickedNode instanceof ImageView) {
+            ImageView img = (ImageView) clickedNode;
+            System.out.println(img.getImage().getUrl());
+            String[] values = img.getImage().getUrl().split("/")[img.getImage().getUrl().split("/").length - 1].replace(".png", "").split("_");
+            if (values[0].contains(".gif")) {
+                return Juego.buscarFicha(-1, -1);
+            }
+            return Juego.buscarFicha(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
         }
-        String[] values = imageNameWithoutExtension.split("_");
-        String lI = values[0];
-        String lD = values[1];
-        return new Ficha(Integer.parseInt(lI), Integer.parseInt(lD), "/util/Fichas/" + lI + "_" + lD + ".png");
+        return null;
     }
 
     public boolean validarFichaJuego(Ficha ficha_jugada) {
         if (tablero.isEmpty()) {
             return true;
         }
-        return ficha_jugada.getLadoD() == this.getExtremeI() || ficha_jugada.getLadoI() == this.getExtremeD();
+        return ficha_jugada.getLadoD() == this.getLadoExtremeIz() || ficha_jugada.getLadoI() == this.getLadoExtremeDer();
     }
 
     public boolean gameOver() {
@@ -120,7 +128,7 @@ public class Juego {
             alert.getButtonTypes().setAll(ok);
             alert.showAndWait();
             try {
-                App.setRoot("Menu",UtilitariaView.widthWindow , UtilitariaView.heightWindow);
+                App.setRoot("Menu", Utilitaria.widthWindow, Utilitaria.heightWindow);
             } catch (IOException e) {
             }
         }
@@ -129,9 +137,9 @@ public class Juego {
 
     public boolean jugarFicha(Ficha f) {
         if (tablero.isEmpty() && f instanceof FichaComodin) {
-            int l2 = UtilitariaView.mostrarDialogoNumeros("Elegir el número del lado derecho");
-            int l1 = UtilitariaView.mostrarDialogoNumeros("Elegir el número del lado izquierdo");
-            tablero.add(new Ficha(l1,l2,"/util/Fichas/"+l1+"_"+l2+".png"));
+            int ladoI = Utilitaria.obtenerNumeroDialogo("Elegir el número del lado izquierdo");
+            int ladoD = Utilitaria.obtenerNumeroDialogo("Elegir el número del lado derecho");
+            tablero.add(Juego.buscarFicha(ladoI, ladoD));
             jugadores.get(turno).removerFicha(f);
             return true;
         }
@@ -141,24 +149,24 @@ public class Juego {
             return true;
         }
         if (f instanceof FichaComodin) {
-            String ubi = UtilitariaView.mostrarDialogoPosicion();
-            if (ubi == null) {
+            String posicion = Utilitaria.obtenerPosicionDialogo();
+            if (posicion == null) {
                 return false;
             }
-            int l = UtilitariaView.mostrarDialogoNumeros("Elegir número comodin");
-            if (l == -1) {
+            int lado = Utilitaria.obtenerNumeroDialogo("Elegir número comodin");
+            if (lado == -1) {
                 return false;
             }
             jugadores.get(turno).removerFicha(f);
-            if (ubi.equals("Izquierda")) {
-                tablero.add(0, new Ficha(l, this.getExtremeI(), "/util/Fichas/" + l + "_" + this.getExtremeI() + ".png"));
+            if (posicion.equals("Izquierda")) {
+                tablero.add(0, Juego.buscarFicha(lado, this.getLadoExtremeIz()));
             } else {
-                tablero.add(new Ficha(this.getExtremeD(), l, "/util/Fichas/" + this.getExtremeD() + "_" + l + ".png"));
+                tablero.add(Juego.buscarFicha(this.getLadoExtremeDer(), lado));
             }
             return true;
         }
-        if (f.getLadoD() == this.getExtremeI() && f.getLadoI() == this.getExtremeD()) {
-            String ubi = UtilitariaView.mostrarDialogoPosicion();
+        if (f.getLadoD() == this.getLadoExtremeIz() && f.getLadoI() == this.getLadoExtremeDer()) {
+            String ubi = Utilitaria.obtenerPosicionDialogo();
             if (ubi == null) {
                 return false;
             }
@@ -170,16 +178,14 @@ public class Juego {
             jugadores.get(turno).removerFicha(f);
             return true;
         }
-        if (f.getLadoD() == this.getExtremeI()) {
+        if (f.getLadoD() == this.getLadoExtremeIz()) {
             tablero.add(0, f);
             jugadores.get(turno).removerFicha(f);
-            System.out.println("wtf");
             return true;
         }
-        if (f.getLadoI() == this.getExtremeD()) {
+        if (f.getLadoI() == this.getLadoExtremeDer()) {
             tablero.add(f);
             jugadores.get(turno).removerFicha(f);
-            System.out.println("wtff");
             return true;
         }
         return false;
@@ -193,16 +199,16 @@ public class Juego {
             for (Ficha f : jugadores.get(1).getMano()) {
                 if (f instanceof FichaComodin) {
                     jugadores.get(1).removerFicha(f);
-                    int x =(int) (Math.random() * 7);
-                    tablero.add(new Ficha(this.getExtremeD(), x, "/util/Fichas/" + this.getExtremeD() + "_" + x + ".png"));
+                    int lado = (int) (Math.random() * 7);
+                    tablero.add(Juego.buscarFicha(this.getLadoExtremeDer(), lado));
                     break;
                 }
-                if (f.getLadoI() == this.getExtremeD()) {
+                if (f.getLadoI() == this.getLadoExtremeDer()) {
                     tablero.add(f);
                     jugadores.get(1).removerFicha(f);
                     break;
                 }
-                if (f.getLadoD() == this.getExtremeI()) {
+                if (f.getLadoD() == this.getLadoExtremeIz()) {
                     tablero.add(0, f);
                     jugadores.get(1).removerFicha(f);
                     break;
